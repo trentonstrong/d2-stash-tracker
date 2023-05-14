@@ -1,2 +1,7 @@
-# d2-stash-tracker
-A Tauri native app for Diablo 2 single player stash tracking. Primarily aimed at D2R.
+# Tauri + Svelte + Typescript
+
+This template should help get you started developing with Tauri, Svelte and TypeScript in Vite.
+
+## Recommended IDE Setup
+
+[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer).
