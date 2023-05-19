@@ -1,0 +1,3 @@
+[submodule "d2s"]
+	path = d2s
+	url = https://github.com/dschu012/d2s.git

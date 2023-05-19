@@ -1,6 +1,9 @@
 lockfileVersion: '6.0'
 
 dependencies:
+  '@dschu012/d2s':
+    specifier: link:d2s
+    version: link:d2s
   '@tauri-apps/api':
     specifier: ^1.3.0
     version: 1.3.0

@@ -1,11 +1,11 @@
 <script lang="ts">
-  import Greet from './lib/Greet.svelte'
+  import Import from './lib/Import.svelte'
 </script>
 
 <main class="container">
-  <h1>Welcome to Tauri!</h1>
+  <h1>D2R Stash Tracker</h1>
 
-  <div class="row">
+  <!-- <div class="row">
     <a href="https://vitejs.dev" target="_blank">
       <img src="/vite.svg" class="logo vite" alt="Vite Logo" />
     </a>
@@ -15,14 +15,14 @@
     <a href="https://svelte.dev" target="_blank">
       <img src="/svelte.svg" class="logo svelte" alt="Svelte Logo" />
     </a>
-  </div>
+  </div> -->
 
   <p>
-    Click on the Tauri, Vite, and Svelte logos to learn more.
+    Select a Character file (.d2s) or Shared Stash file (.d2i) to import your stash.
   </p>
 
   <div class="row">
-    <Greet />
+    <Import />
   </div>
 
 
