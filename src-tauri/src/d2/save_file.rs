@@ -106,7 +106,7 @@ mod tests {
 
     macro_rules! test_case {($fname:expr) => (
         concat!(env!("CARGO_MANIFEST_DIR"), "/resources/test/", $fname) // assumes Linux ('/')!
-      )}
+    )}
 
     #[test]
     fn test_load_save_from_path() {
