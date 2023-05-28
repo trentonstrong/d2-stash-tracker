@@ -1,25 +1,26 @@
 use std::collections::HashMap;
 use serde::Deserialize;
+use std::error::Error;
 use serde_repr::Deserialize_repr;
 
 
 #[derive(Deserialize, Debug)]
 pub struct CharacterDataStatus {
-    expansion: bool,
-    died: bool,
-    hardcore: bool,
-    ladder: bool,
+    pub expansion: bool,
+    pub died: bool,
+    pub hardcore: bool,
+    pub ladder: bool,
 }
 
 #[derive(Deserialize, Debug)]
 pub struct CharacterDataHeader {
-    identifier: String,
-    name: String,
-    level: u8,
-    class: String,
-    status: CharacterDataStatus,
-    created: u32,
-    last_played: u32,
+    pub identifier: String,
+    pub name: String,
+    pub level: u8,
+    pub class: String,
+    pub status: CharacterDataStatus,
+    pub created: u32,
+    pub last_played: u32,
 }
 
 pub type CharacterDataAttributes = HashMap<String, u32>;
@@ -130,17 +131,22 @@ pub struct ItemData {
 
 #[derive(Deserialize, Debug)]
 pub struct CharacterData {
-    header: CharacterDataHeader,
-    attributes: CharacterDataAttributes,
-    items: Vec<ItemData>,
-    corpse_items: Vec<ItemData>,
-    merc_items: Vec<ItemData>,
+    pub header: CharacterDataHeader,
+    pub attributes: CharacterDataAttributes,
+    pub items: Vec<ItemData>,
+    pub corpse_items: Vec<ItemData>,
+    pub merc_items: Vec<ItemData>,
+}
+
+impl CharacterData {
+  pub fn from_json_str(s: &str) -> Result<CharacterData, Box<dyn Error>> {
+    return serde_json::from_str(s).map_err(|e| e.into());
+  }
 }
 
 #[cfg(test)]
 mod tests {
   use super::*;
-  use serde_json::from_str;
 
   macro_rules! test_case {($fname:expr) => (
     concat!(env!("CARGO_MANIFEST_DIR"), "/resources/test/", $fname) // assumes Linux ('/')!
@@ -149,7 +155,7 @@ mod tests {
   #[test]
   fn test_deserialize_character() {
     let test_character = include_bytes!(test_case!("test_character.json"));
-    let character_data: CharacterData = match from_str(std::str::from_utf8(test_character).unwrap()) {
+    let character_data: CharacterData = match CharacterData::from_json_str(std::str::from_utf8(test_character).unwrap()) {
       Ok(character_data) => character_data,
       Err(err) => panic!("Error deserializing character: {}", err)
     };

@@ -1,29 +1,19 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-
 use log::trace;
-use serde_json::from_str;
-use d2::model::CharacterData;
+use d2_stash_tracker::{get_connection_pool, import_character, run_pending_migrations, ConnectionPool};
+use diesel::prelude::*;
 
-mod d2;
-
-// Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
-}
 
 #[tauri::command]
-fn import(character_json: &str) -> String {
+fn import(pool: tauri::State<ConnectionPool>, character_json: &str) -> Result<String, String> {
     trace!("importing character: {}", character_json);
-    let character_data: CharacterData = match from_str(character_json) {
-        Ok(character_data) => character_data,
-        Err(err) => return err.to_string()
-    };
+    let conn = &mut pool.get().unwrap();
+    let result = import_character(conn, character_json).map_err(|err| err.to_string())?;
+    trace!("result: {:?}", result);
+    let result_msg = format!("{} character {} successfully.", result.status, result.character.name);
 
-    trace!("character: {:?}", character_data);
-
-    return String::from("Ok");
+    return Ok(result_msg);
 }
 
 fn main() {
@@ -31,8 +21,12 @@ fn main() {
     env_logger::init_from_env(env);
     log::info!("Starting up D2Rust Stash Manager");
 
+    let pool = get_connection_pool(None);
+    let conn: &mut SqliteConnection = &mut pool.get().unwrap();
+    run_pending_migrations(conn).unwrap();
+
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![greet])
+        .manage(pool)
         .invoke_handler(tauri::generate_handler![import])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -1,3 +1,3 @@
 pub mod save_file;
 pub mod parser;
-pub mod model;
+pub mod models;
